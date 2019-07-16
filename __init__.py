@@ -653,7 +653,7 @@ class MbtaBusTracking(MycroftSkill):
         self.stopName = self.t.setStop(stop)
         #print('Direction set to {} toward {} at {}'.format(self.dirName,self.destName,self.stopName))
      
-      # if we got all the infor needed,get arrivals
+      # if we got all the info needed,get arrivals
       if( self.routeName and self.dirName and self.stopName ):
       
         # good to go - list arrivals or start tracking
@@ -754,7 +754,7 @@ class MbtaBusTracking(MycroftSkill):
         .optionally('Stop').build())
     def handle_tracking_intent(self, message):
       
-      # process arrivals request
+      # process tracking request
       self.processRequest(message, True)
 
     # save shortcut
