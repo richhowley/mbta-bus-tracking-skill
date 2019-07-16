@@ -3,38 +3,44 @@
     "skillMetadata": {
         "sections": [
             {
-                "name": "Options << Name of section",
-                "fields": [
-                    {
-                        "name": "internal_python_variable_name",
-                        "type": "text",
-                        "label": "Setting Friendly Display Name",
-                        "value": "",
-                        "placeholder": "demo prompt in the input box"
-                    }
-                ]
-            },
-            {
-                "name": "Login << Name of another section",
+                "name": "MBTA Bus Tracking",
                 "fields": [
                     {
                         "type": "label",
-                        "label": "Just a little bit of extra info for the user to understand following settings"
+                        "label": "Enter your <a href=\"https://api-v3.mbta.com/login\">MBTA</a> API keyl"
                     },
                     {
-                        "name": "username",
+                        "name": "api_key",
                         "type": "text",
-                        "label": "Username",
+                        "label": "API Key",
                         "value": ""
                     },
                     {
-                        "name": "password",
-                        "type": "password",
-                        "label": "Password",
-                        "value": ""
+                    "type": "label",
+                    "label": "How many busses should Mycroft track?"
+                    },
+                    {
+                        "name": "maxTrack",
+                        "type": "number",
+                        "label": "Busses to track",
+                        "value": "3"
+                    },                
+                    {
+                    "type": "label",
+                    "label": "How often should Mycroft announce bus arrival predictions (min 20 secs)?"
+                    },
+                    {
+                        "name": "trackingUpateFreq",
+                        "type": "number",
+                        "label": "Seconds",
+                        "value": "30"
                     }
+                    
+                    
                 ]
             }
         ]
     }
+
 }
+

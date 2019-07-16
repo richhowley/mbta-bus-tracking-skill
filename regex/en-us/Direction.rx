@@ -1,0 +1,1 @@
+(direction|to|toward|going) (?P<Direction>.*)
