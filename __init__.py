@@ -5,7 +5,7 @@ from mycroft.util.parse import fuzzy_match
 from mycroft.util.log import getLogger
 import mycroft.util
 from mycroft.audio import wait_while_speaking
-from mycroft.skills.settings import SkillSettings
+#from mycroft.skills.settings import apiings
 from mycroft import intent_handler
 import requests
 import datetime
@@ -89,6 +89,12 @@ class MBTA():
       self.serverError = True
     
     return retVal
+
+  # API calls die silently, return true if last call
+  # resulted in an error
+  def callError(self):
+    return self.serverError
+
     
   # information on all MBTA bus routes is read from server
   # not all information is relevant to skill, we build a
@@ -340,10 +346,12 @@ class MbtaBusTracking(MycroftSkill):
   
     def __init__(self):
         MycroftSkill.__init__(self)
-        
+        super(MbtaBusTracking, self).__init__(name="MbtaBusTracking")
+       
         # create MBTA object to handle api calls
-        self.t = MBTA(self.settings['api_key'],self.settings['maxTrack'])       
-      
+        #self.t = MBTA(self.settings['api_key'],self.settings['maxTrack'])          
+        self.t = MBTA(self.settings.get('api_key'),self.settings.get('maxTrack', 3))          
+             
         self.routeName = None           # bus route
         self.requestTracking = False    # True => last request was for tracking, not arrivals
         self.directions = None          # direction name, terminus tuple for route
@@ -351,9 +359,12 @@ class MbtaBusTracking(MycroftSkill):
         self.dirName = None             # direction of travel
         self.destName = None            # terminus for direction
         self.savedRoutes = dict()       # routes save to disk
-        self.trackingInterval = max(30, self.settings['trackingUpateFreq']) # enforce min tracking updates
+        self.trackingInterval = max(30, (self.settings.get('trackingUpateFreq', 30))) # enforce min tracking updates
                     
-        # try to read saved routes
+        # watch for changes on HOME
+        self.settings.set_changed_callback(self.on_websettings_changed)
+        
+      # try to read saved routes
         try:
             with self.file_system.open(ROUTE_FILE , 'rb') as f:
                 self.savedRoutes =  pickle.load(f)
@@ -367,7 +378,17 @@ class MbtaBusTracking(MycroftSkill):
         if self.savedRoutes:
           for s in self.savedRoutes:
               self.register_vocabulary(s, 'SavedRouteNames')
-             
+ 
+    def on_websettings_changed(self):
+      
+      # try to read api key
+      self.apiKey = self.settings.get('api_key')
+      
+      LOGGER.info('MBTA sill api set to ' + self.apiKey)
+      
+      # create MBTA object with new settings
+      self.t = MBTA(self.settings.get('api_key'),self.settings.get('maxTrack', 3))          
+           
     # speak list of passed arrival times
     def announceArrivals(self,eta):
       
@@ -634,11 +655,22 @@ class MbtaBusTracking(MycroftSkill):
       direction = message.data.get("Direction", None)
       stop = message.data.get("Stop", None)
   
+      
       # set up for API call
       if routeName:
         
         # set route name
         routeName = self.setRouteAndDirection(routeName)
+        
+        # check for error
+        if self.t.callError() is True:
+          
+          # server error
+          self.speak_dialog('Bad call to t server') # !!!!!! need dialog
+          
+          # clear route name
+          routeName = None;
+        
 
       # only accept direction if we have a route
       if routeName and direction:
@@ -652,6 +684,7 @@ class MbtaBusTracking(MycroftSkill):
         
         self.stopName = self.t.setStop(stop)
         #print('Direction set to {} toward {} at {}'.format(self.dirName,self.destName,self.stopName))
+ 
      
       # if we got all the info needed,get arrivals
       if( self.routeName and self.dirName and self.stopName ):
@@ -677,10 +710,19 @@ class MbtaBusTracking(MycroftSkill):
          self.setDirectionContext()
           
       else:
-                
-        # need route name
-        self.speak_dialog('Which.Route',expect_response=True)
-        self.set_context('RouteNeededContex')
+            
+          # if we are here it is because no route was in the
+          # utterance, the route in the utterance was not valid
+          # or there was an error calling the API
+          #
+          # set context to get a valid route as long as there wss
+          # not an error calling the API
+          #
+          if self.t.callError() is False: 
+            
+            # need route name
+            self.speak_dialog('Which.Route',expect_response=True)
+            self.set_context('RouteNeededContex')
 
     # set route based on context
     @intent_handler(IntentBuilder('')
@@ -697,8 +739,21 @@ class MbtaBusTracking(MycroftSkill):
       # set route name and direction
       routeName = self.setRouteAndDirection(routeName)
 
-      # now we nedd a direction
-      self.setDirectionContext()
+      # check for server error
+      if self.t.callError() is True:
+        
+        # server error
+        self.speak_dialog('Bad call to t server') # !!!!!! need dialog
+        
+      elif self.routeName is None:
+        
+        # bad route
+        self.speak_dialog('Bad route') # !!!!!! need dialog
+     
+      else:
+
+        # now we nedd a direction
+       self.setDirectionContext()
       
     # set direction based on context
     @intent_handler(IntentBuilder('')
