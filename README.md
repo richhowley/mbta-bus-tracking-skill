@@ -6,7 +6,7 @@ Mycroft will announce estimated arrival times of MBTA buses  at your stop so you
 
 All data and arrival predictions used by this skill are provided by the MBTA.  You must register for an API key on the [MBTA website](https://api-v3.mbta.com/register).  Enter the API key for this skill at Mycroft Home.
 
-See below for full documentation but to get started just say "Hey Mycroft, T Bus Arrivals".  You will be prompted for the bus route, direction and stop name.  Mycroft will respond with all estimated arrival times at your stop.
+See below for full documentation, including how to track busses traveling toward your stop, but to get started just say "Hey Mycroft, T Bus Arrivals".  You will be prompted for the bus route, direction and stop name.  Mycroft will respond with all estimated arrival times at your stop.
 
 <details><summary>View Sample dialog</summary>
 <dl>
@@ -48,7 +48,7 @@ Mycroft will prompt for any missing information.
 
 #### Bus Tracking
 
-Bus tracking is similar to Arrival Times but Mycroft will continue to track busses, periodically updating their predicted arrival times, until they have passed the stop.  By default Mycroft will track the next three busses and will announce updated arrival predictions every 30 seconds.  These values can be changed in the skill settings on Home.  The minimum frequency of updates  is 30 seconds.
+Bus tracking is similar to Arrival Times but Mycroft will continue to track busses, periodically updating their predicted arrival times, until they have passed the stop.  By default Mycroft will track the next three busses and will announce updated arrival predictions every 30 seconds.  These values can be changed in the skill settings on Mycroft Home.  The minimum frequency of updates  is 30 seconds.
 
 As with Arrivals, say
 
