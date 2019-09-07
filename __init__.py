@@ -417,37 +417,40 @@ class MbtaBusTracking(MycroftSkill):
         self.speak_dialog("Bus.Arrival.Prefix", prefix)
       
         for waitTime in wt:
-            
+           
+          # wait for previous arrival announcement to finish
+          wait_while_speaking()
+      
           # calculate hour and minutes from datetime timedelta seconds
           arrival = {
              'hour': waitTime.seconds // 3600,
              'minutes' : (waitTime.seconds % 3600) // 60
           }
-          
+                    
           #  one hour or longer
           if (arrival['hour'] > 0):
  
             # round down to one hour if only one minute over
             if(arrival['minutes'] < 2 ):
-              self.speak_dialog("Arriving.In")
+
               self.speak_dialog("Arriving.Hour", arrival )
             
             else:
             
               # arrives in 1 hour and some minutes
-              self.speak_dialog("Arriving.In")
+
               self.speak_dialog("Arriving.Hour.Minutes", arrival )
             
           elif arrival['minutes'] > 1:
             
             # arrives in more than one minute
-            self.speak_dialog("Arriving.In")
+
             self.speak_dialog("Arriving.Minutes", arrival )
    
           elif arrival['minutes'] == 1:
             
             # arrives in one minute
-            self.speak_dialog("Arriving.In")
+
             self.speak_dialog("Arriving.Minute", arrival )
             
           else:
