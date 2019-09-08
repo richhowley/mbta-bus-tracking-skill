@@ -670,7 +670,8 @@ class MbtaBusTracking(MycroftSkill):
         if self.t.callError() is True:
           
           # server error
-          self.speak_dialog("Error.calling.server")
+          self.speak_dialog("Error.Calling.Server")
+
                     
           # clear route name
           routeName = None;
@@ -747,7 +748,7 @@ class MbtaBusTracking(MycroftSkill):
       if self.t.callError() is True:
         
         # server error
-        self.speak_dialog("Error.calling.server")
+        self.speak_dialog("Error.Calling.Server")
              
       else:
 
