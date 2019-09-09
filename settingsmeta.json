@@ -7,7 +7,7 @@
                 "fields": [
                     {
                         "type": "label",
-                        "label": "Enter your <a href=\"https://api-v3.mbta.com/login\">MBTA</a> API keyl"
+                        "label": "Enter your <a href=\"https://api-v3.mbta.com/login\">MBTA</a> API key"
                     },
                     {
                         "name": "api_key",
@@ -27,7 +27,7 @@
                     },                
                     {
                     "type": "label",
-                    "label": "How often should Mycroft announce bus arrival predictions (min 20 secs)?"
+                    "label": "How often should Mycroft announce bus arrival predictions (min 30 secs)?"
                     },
                     {
                         "name": "trackingUpateFreq",

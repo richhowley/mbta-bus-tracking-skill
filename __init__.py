@@ -348,7 +348,7 @@ class MbtaBusTracking(MycroftSkill):
        
         # create MBTA object to handle api calls     
         self.t = MBTA(self.settings.get('api_key'),self.settings.get('maxTrack', 3))          
-             
+        
         self.routeName = None           # bus route
         self.requestTracking = False    # True => last request was for tracking, not arrivals
         self.directions = None          # direction name, terminus tuple for route
@@ -361,20 +361,21 @@ class MbtaBusTracking(MycroftSkill):
         # watch for changes on HOME
         self.settings.set_changed_callback(self.on_websettings_changed)
         
+    def initialize(self):
+      
       # try to read saved routes
         try:
             with self.file_system.open(ROUTE_FILE , 'rb') as f:
                 self.savedRoutes =  pickle.load(f)
+                
+            # make a vocabulary from saved routes
+            if self.savedRoutes:
+              for s in self.savedRoutes:
+                  self.register_vocabulary(s, 'SavedRouteNames')                
+                
         except:
-            pass
-        
+            pass   
 
-    def initialize(self):
-    
-        # make a vocabulary from saved routes
-        if self.savedRoutes:
-          for s in self.savedRoutes:
-              self.register_vocabulary(s, 'SavedRouteNames')
  
     # handle change of setting on home
     def on_websettings_changed(self):
