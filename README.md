@@ -2,7 +2,7 @@
 Announce arrivals of MBTA busses at your desired stop.
 
 ## About
-Mycroft will announce estimated arrival times of MBTA buses  at your stop so you never leave the house before you have to.
+Mycroft will announce estimated arrival times of MBTA busses  at your stop so you never leave the house before you have to.
 
 All data and arrival predictions used by this skill are provided by the MBTA.  You must register for an API key on the [MBTA website](https://api-v3.mbta.com/register).  Enter the API key for this skill at Mycroft Home.
 
