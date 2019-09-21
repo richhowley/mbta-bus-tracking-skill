@@ -32,7 +32,7 @@ class MBTA():
 
     # error flag valid after API is called
     self.serverError = False
-    
+       
     # save API key
     self.apiKey = apiKey;
     
@@ -46,12 +46,13 @@ class MBTA():
     self.maxTrackCnt = int(trackCount) # max # of busses to track
     self.lastTrack = ""           # last trip to track - stop when no longer in predictions
  
-    # format API URLs
-    ROUTE_URL = "https://api-v3.mbta.com/routes?filter[type]=3&sort=sort_order&api_keyapi_key={}".format(apiKey)
-    STOP_URL = "https://api-v3.mbta.com/stops?api_key={}".format(apiKey)
-    PRED_URL = "https://api-v3.mbta.com//predictions?sort=arrival_time,direction_id&api_keyapi_key={}".format(apiKey)
-
- 
+  # settings have been changed on Home
+  def updateSettings(self, apiKey, trackCount):
+  
+    self.apiKey = apiKey
+    self.maxTrackCnt = int(trackCount) # max # of busses to track
+  
+  
   # reset class, call when stopping tracking
   def reset(self):
 
@@ -67,12 +68,25 @@ class MBTA():
     # clear error flag
     self.serverError = False
      
-    # format URL with end point and API key
-    api_url = "https://api-v3.mbta.com/{}?api_key={}".format(endPoint,self.apiKey)
+    # base url
+    api_url = "https://api-v3.mbta.com/"
+
+    # if we are using an api key and have args
+    if self.apiKey != None and args != None:
+      
+      # url?key%args
+       api_url = "?api_key={}&{}".format(api_url,self.apiKey,args)
+       
+    elif self.apiKey != None:
+      
+      # url?key
+      api_url = "?api_key={}".format(api_url,self.apiKey)
+       
     
-    # add arguments if necessary
-    if( args != None ):
-      api_url = "{}&{}".format(api_url,args)
+    elif args != None :
+      
+      # url?args
+      api_url = "{}?{}".format(api_url,args)
 
     try:
 
@@ -88,6 +102,7 @@ class MBTA():
       self.serverError = True
     
     return retVal
+
 
   # API calls die silently, return true if last call
   # resulted in an error
@@ -346,8 +361,17 @@ class MbtaBusTracking(MycroftSkill):
         MycroftSkill.__init__(self)
         super(MbtaBusTracking, self).__init__(name="MbtaBusTracking")
        
+        self.apiKey = None
+        
+        # using api key?
+        self.useownkey = self.settings.get('useownkey')
+        
+        #   yes, read it from settings
+        if self.useownkey:
+          self.apiKey = self.settings.get('api_key')
+       
         # create MBTA object to handle api calls     
-        self.t = MBTA(self.settings.get('api_key'),self.settings.get('maxTrack', 3))          
+        self.t = MBTA(self.apiKey,self.settings.get('maxTrack', 3))      
         
         self.routeName = None           # bus route
         self.requestTracking = False    # True => last request was for tracking, not arrivals
@@ -379,15 +403,22 @@ class MbtaBusTracking(MycroftSkill):
  
     # handle change of setting on home
     def on_websettings_changed(self):
+  
+      # using api key?
+      self.useownkey = self.settings.get('useownkey')
       
-      # try to read api key
-      self.apiKey = self.settings.get('api_key')
+      #   yes, read it from settings
+      if self.useownkey:
+        self.apiKey = self.settings.get('api_key')
+        LOGGER.info('MBTA skill API key set to ' + self.apiKey)
+      else:
+        self.apiKey = None
+        LOGGER.info('MBTA skill not use an API key')
+     
+      # update MBTA object with new settings   
+      self.t.updateSettings(self.apiKey,self.settings.get('maxTrack', 3))  
       
-      LOGGER.info('MBTA skill api set to ' + self.apiKey)
-      
-      # create MBTA object with new settings
-      self.t = MBTA(self.settings.get('api_key'),self.settings.get('maxTrack', 3))          
- 
+      # get tracking interval
       self.trackingInterval = max(30, (self.settings.get('trackingUpateFreq', 30))) # enforce min tracking updates
 
            
