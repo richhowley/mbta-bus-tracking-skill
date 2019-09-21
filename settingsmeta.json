@@ -24,7 +24,11 @@
                         "type": "number",
                         "label": "Seconds",
                         "value": "30"
-                    },                
+                    },
+                    {
+                    "type": "label",
+                    "label":"API Key - If you would like to use your own MBTA API key you may check the box and enter it here Using an API key rasies the request per minute rate limit but shold not normally be needed. "                         
+                    },                 
                     {
                         "name": "useownkey",
                         "type": "checkbox",
