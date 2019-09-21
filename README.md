@@ -2,9 +2,7 @@
 Announce arrivals of MBTA busses at your desired stop.
 
 ## About
-Mycroft will announce estimated arrival times of MBTA busses  at your stop so you never leave the house before you have to.
-
-All data and arrival predictions used by this skill are provided by the MBTA.  You must register for an API key on the [MBTA website](https://api-v3.mbta.com/register).  Enter the API key for this skill at Mycroft Home.
+Mycroft will announce estimated arrival times of MBTA busses  at your stop so you never leave the house before you have to.  All data and arrival predictions used by this skill are provided by the MBTA.  
 
 See below for full documentation, including how to track busses traveling toward your stop, but to get started just say "Hey Mycroft, T Bus Arrivals".  You will be prompted for the bus route, direction and stop name.  Mycroft will respond with all estimated arrival times at your stop.
 
@@ -83,6 +81,10 @@ Two additional phrases
 > T bus remove shortcut rat race
 
 allow you to list and delete saved shortcuts.
+
+#### API Key
+
+When installed this skill does not use an API key when getting data from the MBTA servers.  Using a key allows a higher rate limit when requesting data.  It should not be necessary to use an API key but if you like you may obtain one on the [MBTA website](https://api-v3.mbta.com/register). In the skill settings on Mycroft Home check the box next to "Use my API key" and enter your key in the text field.
 
 </details>
 
