@@ -6,16 +6,6 @@
                 "name": "MBTA Bus Tracking",
                 "fields": [
                     {
-                        "type": "label",
-                        "label": "Enter your <a href=\"https://api-v3.mbta.com/login\">MBTA</a> API key"
-                    },
-                    {
-                        "name": "api_key",
-                        "type": "text",
-                        "label": "API Key",
-                        "value": ""
-                    },
-                    {
                     "type": "label",
                     "label": "How many busses should Mycroft track?"
                     },
@@ -34,8 +24,21 @@
                         "type": "number",
                         "label": "Seconds",
                         "value": "30"
-                    }
-                    
+                    },                
+                    {
+                        "type": "checkbox",
+                        "label": "Use my API key"
+                    },
+                    {
+                        "type": "label",
+                        "label": "Enter your <a href=\"https://api-v3.mbta.com/login\">MBTA</a> API key"
+                    },
+                    {
+                        "name": "api_key",
+                        "type": "text",
+                        "label": "API Key",
+                        "value": ""
+                    }                  
                     
                 ]
             }
