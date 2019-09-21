@@ -26,6 +26,7 @@
                         "value": "30"
                     },                
                     {
+                        "name": "useownkey",
                         "type": "checkbox",
                         "label": "Use my API key"
                     },
