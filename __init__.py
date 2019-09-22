@@ -69,7 +69,7 @@ class MBTA():
     self.serverError = False
      
     # base url
-    api_url = "https://api-v3.mbta.com/"
+    api_url = "https://api-v3.mbta.com/{}".format(endPoint)
 
     # if we are using an api key and have args
     if self.apiKey != None and args != None:
