@@ -75,14 +75,13 @@ class MBTA():
     if self.apiKey != None and args != None:
       
       # url?key%args
-       api_url = "?api_key={}&{}".format(api_url,self.apiKey,args)
+       api_url = "{}?api_key={}&{}".format(api_url,self.apiKey,args)
        
     elif self.apiKey != None:
       
       # url?key
-      api_url = "?api_key={}".format(api_url,self.apiKey)
+      api_url = "{}?api_key={}".format(api_url,self.apiKey)
        
-    
     elif args != None :
       
       # url?args
