@@ -136,8 +136,9 @@ class MBTA():
                                          'long_name' : rt['attributes']['long_name'],  # long name
                                          'dirs' : rt['attributes']['direction_names'], # directions
                                          'dest' : rt['attributes']['direction_destinations'] # terminus
-                                        }
-      
+                                      }
+            
+            
   # set current route based on passed name
   # return route name or None
   def setRoute(self, routeName):
@@ -238,11 +239,11 @@ class MBTA():
   # key is name, to compare with utterance
   # value is id, to use for API calls
   def getStops(self):
- 
+    
     # ask API for stops
     routeStops = self._getData('stops',
                                 "filter[direction_id]={}&filter[route]={}"
-                                .format(self.currentDirection,self.currentRoute["id"]))
+                                .format(self.currentDirection, self.currentRoute["id"]))
 
       
     # empty dictionary
@@ -629,7 +630,9 @@ class MbtaBusTracking(MycroftSkill):
         # quirks fround in testing
         routeName = routeName.replace('to', '2')
         routeName = routeName.replace('for', '4')
-
+        
+        # convert any alpha characters to uppercase
+        routeName = routeName.upper()
 
         # tell API which route we are riding
         self.routeName = self.t.setRoute(routeName)
