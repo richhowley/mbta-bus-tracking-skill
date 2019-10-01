@@ -1,5 +1,5 @@
 {
-  "utterance": "t bus arrivals for route 57",
+  "utterance": "t bus arrivals for route 57 direction outbound stop cambridge street at north beacon street",
   "intent": {
     "T.Bus": "t bus",
     "Arrivals": "arrivals",

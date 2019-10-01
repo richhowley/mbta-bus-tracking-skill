@@ -1,5 +1,5 @@
 {
-  "utterance": "t bus tracking for route 86",
+  "utterance": "t bus tracking for route 86 going inbound stop washington street at beacon street",
   "intent": {
     "T.Bus": "t bus",    
     "Tracking": "tracking",
