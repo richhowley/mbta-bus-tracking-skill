@@ -2,7 +2,6 @@ from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_file_handler
 from mycroft.util.parse import match_one
 from mycroft.util.parse import fuzzy_match
-from mycroft.util.log import getLogger
 import mycroft.util
 from mycroft.audio import wait_while_speaking
 from mycroft import intent_handler
@@ -13,8 +12,6 @@ import pickle
 import re
 import copy
 
-
-LOGGER = getLogger(__name__)
 
 class MBTA():
   
@@ -226,9 +223,10 @@ class MBTA():
 
   # format stop name to (hopefully) match spoken version
   def formatStopName(self, str):
-   
+    
     # Street for St
-    str = re.sub(r'St ', 'Street ', str)
+    str = re.sub(r'St ', 'Street ', str)    
+    str = re.sub(r' St$', ' Street ', str)
     
     # opposite for opp
     str = re.sub(r'opp ', 'opposite ', str)
@@ -361,6 +359,8 @@ class MbtaBusTracking(MycroftSkill):
         MycroftSkill.__init__(self)
         super(MbtaBusTracking, self).__init__(name="MbtaBusTracking")
        
+    def initialize(self):
+ 
         self.apiKey = None
         
         # using api key?
@@ -383,10 +383,8 @@ class MbtaBusTracking(MycroftSkill):
         self.trackingInterval = max(30, (self.settings.get('trackingUpateFreq', 30))) # enforce min tracking updates
                     
         # watch for changes on HOME
-        self.settings.set_changed_callback(self.on_websettings_changed)
-        
-    def initialize(self):
-      
+        self.settings_change_callback = self.on_websettings_changed
+            
       # try to read saved routes
         try:
             with self.file_system.open(ROUTE_FILE , 'rb') as f:
@@ -410,14 +408,14 @@ class MbtaBusTracking(MycroftSkill):
       #   yes, read it from settings
       if self.useownkey:
         self.apiKey = self.settings.get('api_key')
-        LOGGER.info('MBTA skill API key set to ' + self.apiKey)
+        self.log.info('MBTA skill API key set to ' + self.apiKey)
       else:
         self.apiKey = None
-        LOGGER.info('MBTA skill not use an API key')
+        self.log.info('MBTA skill not use an API key')
      
       # update MBTA object with new settings   
       self.t.updateSettings(self.apiKey,self.settings.get('maxTrack', 3))  
-      
+
       # get tracking interval
       self.trackingInterval = max(30, (self.settings.get('trackingUpateFreq', 30))) # enforce min tracking updates
 
