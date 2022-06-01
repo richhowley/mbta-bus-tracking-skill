@@ -1,0 +1,1 @@
+(riktning|till|mot|påväg) (?P<Direction>.*)

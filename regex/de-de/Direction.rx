@@ -1,0 +1,1 @@
+(richtung|nach) (?P<Direction>.*)
