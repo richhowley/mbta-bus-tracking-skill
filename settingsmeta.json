@@ -2,7 +2,7 @@
     "skillMetadata": {
         "sections": [
             {
-                "name": "MBTA Bus Tracking",
+                "name": "Trimet Bus Tracking",
                 "fields": [
                     {
                     "type": "label",
@@ -36,7 +36,7 @@
                     },
                     {
                         "type": "label",
-                        "label": "Enter your <a href=\"https://api-v3.mbta.com/login\">MBTA</a> API key"
+                        "label": "Enter your <a href=\"http://developer.trimet.org/ws/V1/">MBTA</a> API key"
                     },
                     {
                         "name": "api_key",
